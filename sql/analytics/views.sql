@@ -22,6 +22,18 @@ SELECT * FROM analytics.monthly_sale;
 REFRESH MATERIALIZED VIEW analytics.monthly_sale;
 
 -- Prescription/Order Metrics per Employee
+CREATE MATERIALIZED VIEW analytics.pharmacist_sale_metrics AS
+SELECT 
+	e.employee_id,
+	e.name AS "Name",
+	e.role AS "Role",
+	SUM(o.total_amount) AS transaction_amount,
+	COUNT(o.order_id) AS order_quantity
+FROM 
+operations.orders o
+JOIN operations.employees e
+ON e.employee_id = o.prescribed_by
+GROUP BY e.employee_id;
 
 -- Dispatch/Order Metrics per Employee
 
